@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/MaeMethas/sa-65-example/service"
@@ -26,18 +27,31 @@ func Authorizes() gin.HandlerFunc {
 			return
 		}
 
-		jwtWrapper := service.JwtWrapper{
-			SecretKey: "SvNQpBN8y3qlVrsGAYYWoJJk56LtzFHx",
-			Issuer:    "AuthService",
+		// โหลดค่าจาก environment variables
+		secretKey := os.Getenv("JWT_SECRET")
+		if secretKey == "" {
+			secretKey = "your-super-secret-jwt-key-change-this-in-production-2024"
+		}
+		
+		issuer := os.Getenv("JWT_ISSUER")
+		if issuer == "" {
+			issuer = "UniversityRegistrationSystem"
 		}
 
-		_, err := jwtWrapper.ValidateToken(clientToken)
+		jwtWrapper := service.JwtWrapper{
+			SecretKey: secretKey,
+			Issuer:    issuer,
+		}
+
+		claims, err := jwtWrapper.ValidateToken(clientToken)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			return
-
 		}
-		// c.Set("email", claims.Email)
+		
+		// เก็บข้อมูล student ใน context เพื่อใช้งานต่อไป
+		c.Set("student_id", claims.StudentID)
+		c.Set("s_id", claims.S_ID)
 		c.Next()
 	}
 
