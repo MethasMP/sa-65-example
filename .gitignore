@@ -1,0 +1,28 @@
+```
+# Environment variables
+.env
+
+# Compiled binaries
+*.exe
+*.dll
+*.so
+*.a
+*.o
+*.obj
+*.out
+
+# Dependencies
+vendor/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Database files
+*.db
+
+# Editors
+.vscode/
+.idea/
+```

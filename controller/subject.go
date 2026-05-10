@@ -33,8 +33,8 @@ func ListSubject(c *gin.Context) {
 // DELETE /subjects/:id
 func DeleteSubject(c *gin.Context) {
 	id := c.Param("id")
-	if tx := entity.DB().Exec("DELETE FORM subjects WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "subject not found"})
+	if tx := entity.DB().Exec("DELETE FROM subjects WHERE id = ?", id); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Subject not found"})
 		return
 	}
 
